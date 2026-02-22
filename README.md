@@ -2,11 +2,14 @@
 
 Agent（Claude Code / Codex CLI）から Discord Webhook で通知を送信する MCP
 
+<img width="792" height="555" alt="image" src="https://github.com/user-attachments/assets/709766a6-f2e8-44b4-a210-12ad0adf6270" />
+
+
 ## セットアップ
 
 ### 1. Discord Webhook URL を取得
 
-Discord サーバー設定 → 連携サービス → ウェブフック → 新しいウェブフック → URL をコピー
+Discord チャンネル設定 → 連携サービス → ウェブフック → 新しいウェブフック → URL をコピー
 
 ### 2. MCP サーバーを登録
 
