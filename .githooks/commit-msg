@@ -1,0 +1,26 @@
+#!/bin/sh
+# Validate Conventional Commits format
+# pattern: type(scope)?: subject
+# types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert
+
+commit_msg_file="$1"
+commit_msg=$(head -1 "$commit_msg_file")
+
+# Allow merge commits
+if echo "$commit_msg" | grep -qE '^Merge '; then
+  exit 0
+fi
+
+pattern='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?(!)?: .{1,}'
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo "ERROR: Commit message does not follow Conventional Commits format."
+  echo ""
+  echo "  Format: <type>(<scope>): <subject>"
+  echo "  Example: feat(webhook): add message send tool"
+  echo ""
+  echo "  Allowed types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+  echo ""
+  echo "  Your message: $commit_msg"
+  exit 1
+fi
