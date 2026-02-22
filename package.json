@@ -1,6 +1,6 @@
 {
   "name": "discord-webhook-mcp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "MCP server for sending Discord Webhook notifications from AI coding agents",
   "type": "module",
   "bin": {
@@ -27,15 +27,17 @@
     "dist/index.cjs"
   ],
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   },
   "devDependencies": {
+    "@hono/mcp": "^0.2.3",
     "@hono/node-server": "^1.19.9",
     "@inquirer/prompts": "^8.2.1",
     "@modelcontextprotocol/sdk": "^1.26.0",
     "@types/node": "^25.3.0",
     "esbuild": "^0.27.3",
-    "fetch-to-node": "^2.1.0",
     "hono": "^4.12.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",

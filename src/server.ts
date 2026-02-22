@@ -1,8 +1,7 @@
 import { Hono } from "hono";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
+import { StreamableHTTPTransport } from "@hono/mcp";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { toFetchResponse, toReqRes } from "fetch-to-node";
 import { serve } from "@hono/node-server";
 import type { Config } from "./config/schema.js";
 import { DiscordClient } from "./discord/client.js";
@@ -30,34 +29,14 @@ export async function startStdioServer(config: Config): Promise<void> {
 export async function startHttpServer(config: Config): Promise<void> {
   const discord = new DiscordClient(config);
   const app = new Hono();
+  const mcpServer = createMcpServer(discord);
+  const transport = new StreamableHTTPTransport();
 
-  app.post("/mcp", async (c) => {
-    const { req, res } = toReqRes(c.req.raw);
-    const server = createMcpServer(discord);
-
-    try {
-      const transport = new StreamableHTTPServerTransport({
-        sessionIdGenerator: undefined,
-      });
-      await server.connect(transport);
-      await transport.handleRequest(req, res, await c.req.json());
-
-      res.on("close", () => {
-        transport.close();
-        server.close();
-      });
-
-      return toFetchResponse(res);
-    } catch (e) {
-      return c.json(
-        {
-          jsonrpc: "2.0",
-          error: { code: -32603, message: "Internal server error" },
-          id: null,
-        },
-        { status: 500 }
-      );
+  app.all("/mcp", async (c) => {
+    if (!mcpServer.isConnected()) {
+      await mcpServer.connect(transport);
     }
+    return transport.handleRequest(c);
   });
 
   app.get("/health", (c) => c.json({ status: "ok" }));
