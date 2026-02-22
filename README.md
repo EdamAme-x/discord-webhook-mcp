@@ -1,6 +1,6 @@
 # discord-webhook-mcp
 
-AI コーディングエージェント（Claude Code / Codex CLI）から Discord Webhook で通知を送信する MCP サーバー。
+Agent（Claude Code / Codex CLI）から Discord Webhook で通知を送信する MCP サーバー。
 
 ## セットアップ
 
